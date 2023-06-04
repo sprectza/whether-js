@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather App</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <input id="cityInput" type="text" placeholder="Enter cities separated by commas">
+    <button id="getWeatherButton">Get Weather</button>
+    <div id="weatherResults"></div>
+
+    <script>
+        document.getElementById('getWeatherButton').addEventListener('click', async () => {
+            const cities = document.getElementById('cityInput').value.split(',');
+            const response = await fetch('http://localhost:3000/getWeather', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cities: cities }),
+            });
+            const weatherData = await response.json();
+
+            let results = '';
+            for (let city in weatherData.weather) {
+                results += `${city}: ${weatherData.weather[city]}<br>`;
+            }
+
+            document.getElementById('weatherResults').innerHTML = results;
+        });
+    </script>
+</body>
+
+</html>
